@@ -9,12 +9,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const app = express();
 const cookieParser = require('cookie-parser');
+const imageDownloader = require('image-downloader');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisIsOneSecretkey';
 
 app.use(express.json());
 app.use(cookieParser());
+app.use('/uploads', express.static(__dirname+'/uploads'));
 app.use(cors({      //connecting the two api
     credentials: true,
     origin: 'http://localhost:5173',
@@ -46,31 +48,6 @@ app.post('/register', async (req,res)=>{
 });
 
 //login api endpoint
-// app.post('/login', async (req,res)=>{
-//   mongoose.connect(process.env.MONGO_URL);
-//     const {email,password} = req.body;
-//     const user1 = await User.findOne({email});
-
-//     if(user1){
-//         //res.json('user found');
-//         const passOk = bcrypt.compareSync(password,user1.password);
-//         if (passOk) {
-//             jwt.sign({
-//               email:user1.email,
-//               id:user1._id
-//             }, jwtSecret, {}, (err,token) => {
-//               if (err) throw err;
-//               res.cookie('token', token).json(userInfo);
-//             });
-//         } else{
-//             res.json('pass not ok')
-//         }
-
-//     } else{
-//         res.status(422).json('user not found');
-//     }
-// });
-
 app.post('/login', async (req,res) => {
   mongoose.connect(process.env.MONGO_URL);
   const {email,password} = req.body;
@@ -111,6 +88,19 @@ app.get('/profile', (req,res) => {
 //logout api endpoint
 app.post('/logout', (req,res)=> {
     res.cookie('token', '').json(true);
+});
+
+//Uploading image by link api endpoint
+app.post('/upload-by-link', async (req,res) => {
+  const {link} = req.body;
+  const newName = 'photo' + Date.now() + '.jpg';
+  await imageDownloader.image({
+    url: link,
+    dest: __dirname + '/uploads' +newName,
+  });
+  // const url = await uploadToS3('/tmp/' +newName, newName, mime.lookup('/tmp/' +newName));
+  // res.json(url);
+  res.json(newName);
 });
 
 app.listen(4001); //port
