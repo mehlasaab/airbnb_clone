@@ -5,11 +5,14 @@ const cors = require('cors');
 require('dotenv').config()
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Place = require('./models/Places.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const app = express();
 const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
+const multer = require('multer');
+const fs = require('fs');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisIsOneSecretkey';
@@ -96,11 +99,45 @@ app.post('/upload-by-link', async (req,res) => {
   const newName = 'photo' + Date.now() + '.jpg';
   await imageDownloader.image({
     url: link,
-    dest: __dirname + '/uploads' +newName,
+    dest: __dirname + '/uploads/' +newName,
   });
   // const url = await uploadToS3('/tmp/' +newName, newName, mime.lookup('/tmp/' +newName));
   // res.json(url);
   res.json(newName);
+});
+
+//upload from local api endpoint
+const photosMiddleware = multer({dest:'/tmp'});
+app.post('/uploads', photosMiddleware.array('photos', 100), async (req,res) => {
+  const uploadedFiles = [];
+  for (let i = 0; i < req.files.length; i++) {
+    const {path,originalname} = req.files[i];
+    const parts = originalname.split('.');
+    const ext = parts[parts.length - 1];
+    const newPath = path + '.' + ext;
+    fs.renameSync(path,newPath);
+    uploadedFiles.push(newPath.replace('uploads/',''));
+  }
+  res.json(uploadedFiles);
+});
+
+//api endpoint from adding New Places
+app.post('/places', (req,res) => {
+  //mongoose.connect(process.env.MONGO_URL);
+  const {token} = req.cookies;
+  const {
+    title,address,addedPhotos,description,price,
+    perks,extraInfo,checkIn,checkOut,maxGuests,
+  } = req.body;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if (err) throw err;
+    const placeDoc = await Place.create({
+      owner:userData.id,price,
+      title,address,photos:addedPhotos,description,
+      perks,extraInfo,checkIn,checkOut,maxGuests,
+    });
+    res.json(placeDoc);
+  });
 });
 
 app.listen(4001); //port
