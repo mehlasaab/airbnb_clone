@@ -16,6 +16,7 @@ export default  function PlacesFromPage(){
     const [checkOut,setCheckOut] = useState('');
     const [maxGuests,setMaxGuests] = useState(1);
     const [addedPhotos,setAddedPhotos] = useState([]);
+    const [price,setPrice] = useState(100);
     const [redirect,setRedirect] = useState(false);
 
     useEffect(() => {
@@ -33,6 +34,7 @@ export default  function PlacesFromPage(){
             setCheckIn(data.checkIn);
             setCheckOut(data.checkOut);
             setMaxGuests(data.maxGuests);
+            setPrice(data.price);
         })
     }, [id]);
 
@@ -60,7 +62,7 @@ export default  function PlacesFromPage(){
         const placeData = {
           title, address, addedPhotos,
           description, perks, extraInfo,
-          checkIn, checkOut, maxGuests,
+          checkIn, checkOut, maxGuests, price,
         };
         if (id) {
           // update
@@ -119,11 +121,11 @@ export default  function PlacesFromPage(){
                         <input type="number" value={maxGuests}
                             onChange={ev => setMaxGuests(ev.target.value)}/>
                     </div>
-                    {/* <div>
+                    <div>
                         <h3 className="mt-2 -mb-1">Price per night</h3>
                         <input type="number" value={price}
                             onChange={ev => setPrice(ev.target.value)}/>
-                    </div> */}
+                    </div>
                 </div>
                 <button className="primary my-4">Save</button>
             </form>
