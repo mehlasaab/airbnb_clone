@@ -107,7 +107,7 @@ app.post('/upload-by-link', async (req,res) => {
 });
 
 //upload from local api endpoint
-const photosMiddleware = multer({dest:'/tmp'});
+const photosMiddleware = multer({dest:'uploads/'});
 app.post('/uploads', photosMiddleware.array('photos', 100), async (req,res) => {
   const uploadedFiles = [];
   for (let i = 0; i < req.files.length; i++) {
@@ -121,7 +121,7 @@ app.post('/uploads', photosMiddleware.array('photos', 100), async (req,res) => {
   res.json(uploadedFiles);
 });
 
-//api endpoint from adding New Places
+//api endpoint for adding New Places
 app.post('/places', (req,res) => {
   //mongoose.connect(process.env.MONGO_URL);
   const {token} = req.cookies;
@@ -139,6 +139,42 @@ app.post('/places', (req,res) => {
     res.json(placeDoc);
   });
 });
+
+//api endpoint for getting the places
+app.get('/places', (req,res) => {
+  const {token} = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    const {id} = userData;
+    res.json(await Place.find({owner:id}));
+  });
+})
+
+app.get('/places/:id', async (req,res) => {
+  //mongoose.connect(process.env.MONGO_URL);
+  const {id} = req.params;
+  res.json(await Place.findById(id));
+});
+
+app.put('/places', async (req,res) => {
+  const {token} = req.cookies;
+  const {
+    id,title,address,addedPhotos,description,price,
+    perks,extraInfo,checkIn,checkOut,maxGuests,
+  } = req.body;
+  jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+    if(err) throw err;
+    const placeDoc = await Place.findById(id);
+    if(userData.id === placeDoc.owner.toString()){
+      placeDoc.set({
+        title,address,photos:addedPhotos,description,price,
+        perks,extraInfo,checkIn,checkOut,maxGuests
+      });
+      await placeDoc.save();
+      res.json('ok');
+    }
+  });
+})
+
 
 app.listen(4001); //port
 
