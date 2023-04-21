@@ -24,9 +24,9 @@ export default function PlacesPage(){
                     Add New Place
                 </Link>
             </div>
-            <div className="mt-4">
+            <div className="grid gap-4 mt-4">
                 {places.length > 0 && places.map(place => (
-                    <Link to={'/account/places/'+place._id} className=" cursor-pointer flex gap-4 bg-gray-100 p-4 rounded-2xl">
+                    <Link to={'/account/places/'+place._id} className=" cursor-pointer flex gap-4 bg-gray-100 p-4 rounded-2xl shadow shadow-gray-500">
                         <div className="flex w-32 h-32 bg-gray-300 grow shrink-0">
                             <PlaceImg place={place} />
                         </div>
