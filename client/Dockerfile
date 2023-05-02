@@ -1,5 +1,5 @@
 #Telling Docker to use the the node:17-alpine image as the base image
-FROM node:17-alpine
+FROM node:19-alpine
 
 # Layer 2: Telling Docker to create a directory called `/usr/src/app` in the container and set it as the working directory.
 WORKDIR /usr/src/app
