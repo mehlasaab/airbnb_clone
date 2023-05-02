@@ -4,7 +4,7 @@ services:
     image: mehlasaab/skybnb_frontend:latest
     stdin_open: true
     ports:
-      - "1573:1573"
+      - "5173:5173"
     networks:
       - mern-app
   api-server:
