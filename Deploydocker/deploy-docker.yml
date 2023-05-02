@@ -7,7 +7,7 @@
         src: ./docker-compose.yml
         dest: ./
     - name: pull images specifed in docker-compose
-      command: docker-compose -f ./docker-compose.yml pull
+      command: docker-compose -f ./docker-compose.yml up
     - name: run the pulled docker images in detached mode
       command: docker-compose -f ./docker-compose.yml up -d
 
