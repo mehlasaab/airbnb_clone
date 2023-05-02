@@ -10,6 +10,7 @@ COPY ./package-lock.json ./
 
 # Layer 4: Installing the dependencies listed in the package.json file.
 RUN npm i --force
+RUN npm install -g nodemon
 
 # Layer 5: Copying all the files from the root of the project to the `app` directory in the container.
 COPY . .
