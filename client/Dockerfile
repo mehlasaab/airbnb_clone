@@ -9,7 +9,7 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 
 # Layer 4: Installing the dependencies listed in the package.json file.
-RUN npm i --force
+RUN npm i
 
 # Layer 5: Copying all the files from the root of the project to the `app` directory in the container.
 COPY . .
@@ -18,4 +18,5 @@ COPY . .
 EXPOSE 5173
 
 # Layer 7: Telling Docker to run the `npm start` command when the container is started.
-CMD [ "yarn", "dev" ]
+# CMD [ "npm", "dev" ]
+CMD npm run dev
