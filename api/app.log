@@ -1,0 +1,15 @@
+{"level":"error","message":"error"}
+{"level":"warn","message":"warn"}
+{"level":"info","message":"info"}
+{"level":"verbose","message":"verbose"}
+{"level":"debug","message":"debug"}
+{"level":"silly","message":"silly"}
+{"level":"info","message":"app is running in mode:"}
+2023-05-10T10:03:13.163Z - [ERROR  ] - error
+2023-05-10T10:03:13.181Z - [WARN   ] - warn
+2023-05-10T10:03:13.182Z - [INFO   ] - info
+2023-05-10T10:03:13.200Z - [INFO   ] - app is running in mode:
+2023-05-10T10:56:15.548Z - [ERROR  ] - error
+2023-05-10T10:56:15.568Z - [WARN   ] - warn
+2023-05-10T10:56:15.568Z - [INFO   ] - info
+2023-05-10T10:56:15.580Z - [INFO   ] - app is running in mode:

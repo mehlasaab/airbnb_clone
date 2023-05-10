@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const fs = require('fs');
+const logger = require('./logger.js');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisIsOneSecretkey';
@@ -214,9 +215,16 @@ app.get('/bookings', async (req,res) => {
   res.json( await Booking.find({user:userData.id}).populate('place') );
 });
 
+logger.error("error");
+logger.warn("warn");
+logger.info("info");
+logger.verbose("verbose");
+logger.debug("debug");
+logger.silly("silly");
 
-
-app.listen(4001); //port
+app.listen(process.env.PORT || 4001, ()=>{
+  logger.info("app is running in mode:", process.env.NODE_ENV);
+}); //port
 
 //bookings-pass:
 //R4jtHJGykcNPaQAi
