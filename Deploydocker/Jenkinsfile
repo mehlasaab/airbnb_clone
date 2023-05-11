@@ -1,0 +1,60 @@
+pipeline{
+    environment{
+            backend_image = ""
+            frontend_image= ""
+            //registryCredential='docker'
+    }
+    agent any
+    stages{
+        stage('Stage 1: Git Clone'){
+            steps{
+                git branch: 'master', url: 'https://github.com/mehlasaab/airbnb_clone'
+            }
+        }
+        
+        stage('Stage 2: Build Docker Server'){
+            steps{
+                dir("api"){
+                    script{
+                        backend_image= docker.build "mehlasaab/skybnb_backend:latest"
+                    }
+                }
+            }
+        }
+        stage('Stage 3: Build Docker Client'){
+            steps{
+                dir("client"){
+                    script{
+                        frontend_image= docker.build "mehlasaab/skybnb_frontend:latest"
+                    }
+                }
+            }
+        }
+        
+        stage('Stage 4: Push Server Docker Image to DockerHub') {
+            steps {
+                script {
+                    docker.withRegistry('', 'spemini') {
+                        backend_image.push()
+                    }
+                }
+            }
+        }
+        stage('Stage 5: Push Client Docker Image to DockerHub') {
+            steps {
+                script {
+                    docker.withRegistry('', 'spemini') {
+                        frontend_image.push()
+                    }
+                }
+            }
+        }
+        stage('Stage 6: Ansible Deployment to machine'){
+            steps{
+                
+                //ansiblePlaybook becomeUser: 'null', colorized: true, credentialsId: 'docker', installation: 'Ansible', inventory: 'deploy-docker/inventory', playbook: 'deploy-docker/deploy-docker.yml', sudoUser: 'null'
+                ansiblePlaybook disableHostKeyChecking: true, credentialsId: 'InventoryID', inventory: 'Deploydocker/inventory', playbook: 'Deploydocker/deploy-docker.yml'
+            }          
+        }   
+    }
+}
