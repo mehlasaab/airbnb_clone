@@ -79,7 +79,7 @@ app.post('/login', async (req,res) => {
   }
 });
 
-//profile api endpoit
+//profile api endpoit sjdhsh
 app.get('/profile', (req,res) => {
     //mongoose.connect(process.env.MONGO_URL);
     const {token} = req.cookies;
