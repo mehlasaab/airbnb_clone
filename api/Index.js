@@ -15,6 +15,7 @@ const imageDownloader = require('image-downloader');
 const multer = require('multer');
 const fs = require('fs');
 const logger = require('./logger.js');
+const userLogger = require('./logger.js');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'thisIsOneSecretkey';
@@ -67,11 +68,14 @@ app.post('/login', async (req,res) => {
         if (err) throw err;
         res.cookie('token', token).json(user1);
       });
+      userLogger.log('info','user successfull logged in')
     } else {
       res.status(422).json('pass not ok');
+      userLogger.log('error','user login is failed')
     }
   } else {
     res.json('not found');
+    userLogger.log('error','Error in finding the user')
   }
 });
 
