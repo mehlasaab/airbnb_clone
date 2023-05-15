@@ -1,4 +1,4 @@
-const {app} = require("../api");
+const {app} = require("../Index");
 const request = require("supertest");
 const process = require('process')
 
@@ -9,33 +9,27 @@ describe("User API", () => {
     done();
   });
 
-  describe("POST /users", () => {
+  describe("POST /register", () => {
     it("registers a new Recruiter", async () => {
       const newUser = {
-        type: "recruiter",
-        name: "pranjal sharma",
-        email: "pranjsalsskssvjbb.sharma@iiitb.ac.in",
-        password: "1234588888",
-        bio: "Hi i am recruiter",
-        contactNumber: "+916260151299",
+        name: "rahul sharma",
+        email: "rahul.sharma@gmail.com",
+        password: "1234",
       };
 
-      const response = await request(app).post("/auth/signup").send(newUser);
+      const response = await request(app).post("/register").send(newUser);
       expect(response.status).toBe(400);
     }, 30000);
 
     it("returns an error if required fields are missing", async () => {
       const newUser = {
-        type: "recruiter",
-        name: "pranjal sharma",
-        email: "sharmapranjal@iiitb.ac.in",
+        name: "rahul sharma",
+        email: "sharmarahul@gmail.com",
         password: "1234688",
-        bio: "Hi i am recruiter",
-        contactNumber: "+916260101990",
       };
 
       const response = await request(app)
-        .post("/auth/signup")
+        .post("/register")
         .send(newUser)
         .set("Authorization", `Bearer ${token}`);
 
@@ -44,15 +38,15 @@ describe("User API", () => {
     }, 20000);
   });
 
-  describe("POST /auth/login", () => {
+  describe("POST /login", () => {
     it("logs in a user with valid credentials", async () => {
       const credentials = {
-        email: "Utkarsh99.Shrivastava@gmail.com",
-        password: "12345678",
+        email: "sanjumehla@gmail.com",
+        password: "mehlasaab",
       };
 
       const response = await request(app)
-        .post("/auth/login")
+        .post("/login")
         .send(credentials);
 
       expect(response.status).toBe(200);
@@ -62,12 +56,12 @@ describe("User API", () => {
 
     it("returns an error for invalid credentials", async () => {
       const credentials = {
-        email: "Utkarsh99.Shrivasbvjftava@gmail.com",
+        email: "sharama99.Shrarmvasbvjftava@gmail.com",
         password: "123cvhd45678",
       };
 
       const response = await request(app)
-        .post("/auth/login")
+        .post("/login")
         .send(credentials);
 
       expect(response.status).toBe(401);

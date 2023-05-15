@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "nodemon Index.js",
+    "test": "node ./node_modules/jest/bin/jest && jest --forceExit"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -12,5 +16,13 @@
     "process": "^0.11.10",
     "supertest": "^6.3.3",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3"
+  },
+  "jest" : {
+    "testEnvironment" : "node"
   }
 }
