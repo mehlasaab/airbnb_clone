@@ -9,7 +9,7 @@ describe("User API", () => {
     done();
   });
 
-  describe("POST /auth/users", () => {
+  describe("POST /users", () => {
     it("registers a new Recruiter", async () => {
       const newUser = {
         type: "recruiter",
