@@ -30,6 +30,14 @@ pipeline{
                 }
             }
         }
+        stage('Stage : yarn testing'){
+            steps{
+                dir("api"){
+                    sh 'yarn add'
+                    sh 'yarn test'
+                }
+            }
+        }
         
         stage('Stage 4: Push Server Docker Image to DockerHub') {
             steps {
